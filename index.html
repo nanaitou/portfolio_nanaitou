@@ -23,11 +23,11 @@
 
 ╔ーーーーーーーーーーーーーーーーーーーーーーーーーー
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
-║                   デザイナー 
+║          コミュニケーションデザイナー 
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
-║                 内 藤  夏 来
+║               内 藤  夏 来
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
-║         𝕏  https://x.com/naitonatsuki
+║      𝕏  https://x.com/naitonatsuki
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
 ╚ーーーーーーーーーーーーーーーーーーーーーーーーーー
 
@@ -67,7 +67,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>内藤 夏来 | Designer</title>
+  <title>Portfolio</title>
 
   <!-- Google Fonts: はんなり明朝 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,15 +91,31 @@
     body {
       font-family: 'Hannari', serif;
     }
+
+    /* 名刺スライドアップアニメーション */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(120px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .business-card {
+      animation: slideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
   </style>
 </head>
 
 <body class="min-h-screen bg-gray-100 flex items-center justify-center p-6 antialiased">
 
   <!-- 名刺カード (91mm : 55mm = 91:55 比率) -->
-  <div class="bg-white w-full max-w-sm sm:max-w-md aspect-[91/55] shadow-[8px_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center">
+  <div class="business-card bg-white w-full max-w-sm sm:max-w-md aspect-[91/55] shadow-[8px_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center">
     <div class="flex flex-col items-center text-center space-y-4">
-      <p class="text-xs tracking-[0.5em] text-gray-400">デザイナー</p>
+      <p class="text-xs tracking-[0.5em] text-gray-400">コミュニケーションデザイナー</p>
       <h1 class="text-3xl sm:text-4xl tracking-[0.3em] text-gray-800">内藤 夏来</h1>
       <a href="mailto:nanaitou3@gmail.com" class="text-xs tracking-[0.1em] text-gray-400 hover:text-gray-600 transition-colors">連絡先&emsp;nanaitou3@gmail.com</a>
     </div>
