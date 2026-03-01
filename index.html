@@ -23,7 +23,7 @@
 
 ╔ーーーーーーーーーーーーーーーーーーーーーーーーーー
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
-║          コミュニケーションデザイナー 
+║          　　　特命宴会係長
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
 ║               内 藤  夏 来
 ║　　　　　　　　　　　　　　　　　　　　　　　　　　║
@@ -74,6 +74,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hannari&display=swap" rel="stylesheet">
 
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -104,8 +107,106 @@
       }
     }
 
-    .business-card {
+    /* ドロップシャドウアニメーション（削除済み、flipToBack/flipToFront で統合） */
+
+    .business-card-container {
+      perspective: 1000px;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .business-card-container.first-load {
       animation: slideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* 表から裏へのアニメーション（コンテナの影） */
+    .business-card-container.flipping {
+      animation: containerShadowFlip 1.2s ease-in-out forwards;
+    }
+
+    @keyframes containerShadowFlip {
+      0% {
+        box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.12);
+      }
+      25% {
+        box-shadow: 8px 8px 24px rgba(0, 0, 0, 0);
+      }
+      75% {
+        box-shadow: 8px 8px 24px rgba(0, 0, 0, 0);
+      }
+      100% {
+        box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    /* 表から裏へのアニメーション（カード回転） */
+    .business-card-container.flipping .business-card-flip {
+      animation: flipRotateToBack 1.2s ease-in-out forwards;
+    }
+
+    @keyframes flipRotateToBack {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(180deg);
+      }
+    }
+
+    /* 裏から表へのアニメーション（コンテナの影） */
+    .business-card-container.unflipping {
+      animation: containerShadowFlip 1.2s ease-in-out forwards;
+    }
+
+    /* 裏から表へのアニメーション（カード回転） */
+    .business-card-container.unflipping .business-card-flip {
+      animation: flipRotateToFront 1.2s ease-in-out forwards;
+    }
+
+    @keyframes flipRotateToFront {
+      0% {
+        transform: rotateY(180deg);
+      }
+      100% {
+        transform: rotateY(0deg);
+      }
+    }
+
+    /* animation後の状態保持 */
+    .business-card-container.is-flipped .business-card-flip {
+      transform: rotateY(180deg);
+    }
+
+    .business-card-container:not(.is-flipped) .business-card-flip {
+      transform: rotateY(0deg);
+    }
+
+    .business-card-flip {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .business-card-front,
+    .business-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .business-card-front {
+      transform: rotateY(0deg);
+    }
+
+    .business-card-back {
+      transform: rotateY(180deg);
     }
   </style>
 </head>
@@ -113,13 +214,61 @@
 <body class="min-h-screen bg-gray-100 flex items-center justify-center p-6 antialiased">
 
   <!-- 名刺カード (91mm : 55mm = 91:55 比率) -->
-  <div class="business-card bg-white w-full max-w-sm sm:max-w-md aspect-[91/55] shadow-[8px_8px_24px_rgba(0,0,0,0.12)] flex items-center justify-center">
-    <div class="flex flex-col items-center text-center space-y-4">
-      <p class="text-xs tracking-[0.5em] text-gray-400">コミュニケーションデザイナー</p>
-      <h1 class="text-3xl sm:text-4xl tracking-[0.3em] text-gray-800">内藤 夏来</h1>
-      <a href="mailto:nanaitou3@gmail.com" class="text-xs tracking-[0.1em] text-gray-400 hover:text-gray-600 transition-colors">連絡先&emsp;nanaitou3@gmail.com</a>
+  <div class="business-card-container w-full max-w-sm sm:max-w-md aspect-[91/55] shadow-[8px_8px_24px_rgba(0,0,0,0.12)]">
+    <div class="business-card-flip">
+      <!-- 表面 -->
+      <div class="business-card-front bg-white">
+        <div class="flex flex-col items-center text-center space-y-4 px-4">
+          <p class="text-xs tracking-[0.5em] text-gray-400">コミュニケーションデザイナー</p>
+          <h1 class="text-2xl sm:text-3xl tracking-[0.3em] text-gray-800">内藤 夏来</h1>
+          <a href="mailto:nanaitou3@gmail.com" class="text-xs tracking-[0.1em] text-gray-400 hover:text-gray-600 transition-colors">nanaitou3@gmail.com</a>
+        </div>
+      </div>
+      <!-- 裏面 -->
+      <div class="business-card-back bg-white">
+        <div class="flex flex-col items-center text-center space-y-3 px-4">
+          <i class="fab fa-x-twitter text-3xl text-gray-800"></i>
+          <a href="https://x.com/naitonatsuki" class="text-sm tracking-[0.1em] text-gray-600 hover:text-gray-800 transition-colors" target="_blank" rel="noopener noreferrer">@naitonatsuki</a>
+        </div>
+      </div>
     </div>
   </div>
 
+  <script>
+    const cardContainer = document.querySelector('.business-card-container');
+    let isFlipped = false;
+
+    // 初期化：first-load クラスを付与（pageload時）
+    cardContainer.classList.add('first-load');
+
+    cardContainer.addEventListener('click', () => {
+      // 初回クリック時に slideUp animation を削除
+      if (cardContainer.classList.contains('first-load')) {
+        cardContainer.classList.remove('first-load');
+      }
+
+      if (!isFlipped) {
+        // 表から裏へ
+        cardContainer.classList.add('flipping');
+        isFlipped = true;
+
+        // animation 完了後、flipping クラスを削除し is-flipped を追加（状態保持）
+        setTimeout(() => {
+          cardContainer.classList.remove('flipping');
+          cardContainer.classList.add('is-flipped');
+        }, 1200);
+      } else {
+        // 裏から表へ
+        cardContainer.classList.add('unflipping');
+        isFlipped = false;
+
+        // animation 完了後、unflipping クラスを削除し is-flipped を削除（状態保持）
+        setTimeout(() => {
+          cardContainer.classList.remove('unflipping');
+          cardContainer.classList.remove('is-flipped');
+        }, 1200);
+      }
+    });
+  </script>
 </body>
 </html>
